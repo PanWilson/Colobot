@@ -1,0 +1,25 @@
+extern void object::Labirynt()
+{
+    bool t= true;
+    int checkDist = 5;
+    int deg=90;
+    while(t){
+        deg=90;
+        if(radar(GoalArea, 0, 45, 0,checkDist)!=null) t=false;
+        move(5);
+        if(radar(Barrier, 90, 1, 0, checkDist+1)!=null){
+            if(radar(Barrier, 0, 1, 0, checkDist+1)==null){
+                deg=0;
+            }
+            else if(radar(Barrier, -90, 1, 0, checkDist+1)==null){
+                deg=-90;
+            }
+            else if(radar(Barrier,180, 1, 0, checkDist+1)==null){
+                deg=180;
+            }
+        }
+        turn(deg);
+        if(radar(AlienSpider,0,45,0,checkDist)!=null)fire(0.01);
+    }
+
+}
