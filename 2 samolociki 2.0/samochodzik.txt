@@ -1,0 +1,78 @@
+void wymienBatterie(object bateria){
+	goto(bateria.position);
+	grab(EnergyCell);
+	drop(Behind);
+	grab();
+	drop(EnergyCell);
+}
+
+void ustawSie(object obiekt){
+	goto(new point(obiekt.position.x+4,obiekt.position.y,obiekt.position.z));
+	turn(direction(obiekt.position));
+}
+
+object rozgladajSie(int szukany,int kierunek){
+	object hlp;
+	if((hlp = radar(szukany, kierunek, 100, 0, 20))!=null&&detect (WingedGrabber)==false)return hlp;
+	else{
+		wait(1);
+		return hlp;
+	}
+}
+
+void zaladuj(object co, object gdzie){
+	goto(co.position);
+	grab();
+	goto(gdzie.position);
+	drop();
+}
+
+object czekajNaTytan(){
+	object hlp;
+	if((hlp = radar(Titanium, 0, 45, 0, 20))!=null&&detect (WingedGrabber)==false)return hlp;
+	else {
+		wait(1);
+		return hlp;
+	}
+}
+
+extern void object::Wspolpraca()
+{
+	object huta = radar(Converter);
+	object flag = radar(RedFlag);
+	object bateria = radar(PowerCell);
+	object ladunek;
+
+
+	//petla zycia - doniesienie 10 Tytanow
+	for(int i =0;i<10;i++){
+
+
+		//sprawdzanie energi
+		if(energyCell.energyLevel<0.10){
+			wymienBatterie(bateria);
+		}
+
+
+		ustawSie(huta);
+
+		//rozglada sie na zmiane pod katem 45 i -45 stopni
+		int h=45;
+		while((ladunek = rozgladajSie(TitaniumOre, h))==null){
+			h*=-1;
+		}
+
+		zaladuj(ladunek, huta);
+		ustawSie(huta);
+
+		while((ladunek = czekajNaTytan())==null){
+
+		}
+
+		//dostarczenie bloku Tytanu z Convertera na sklad
+		goto(ladunek.position);
+		grab();
+		goto(new point(huta.position.x+15-i*1.1,huta.position.y,huta.position.z));
+		drop();
+	}
+}
