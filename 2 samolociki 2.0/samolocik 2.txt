@@ -1,4 +1,4 @@
-
+// czeka na swoja kolej aby podejsc do kopalni
 bool czekajWKolejce(object doCzego, object kolejka){
 	if(distance(kolejka.position,doCzego.position)>15){
 		return false;
@@ -9,6 +9,7 @@ bool czekajWKolejce(object doCzego, object kolejka){
 	}
 }
 
+//dostarcz towar z pozycji towaru do miejsca docelowego
 void dostarczTowar(object skad, object gdzie){
 	goto(skad.position);
 	grab();
@@ -16,12 +17,14 @@ void dostarczTowar(object skad, object gdzie){
 	drop();
 }
 
+//dostarcz towar z pozycji towaru do miejsca docelowego + uklada w rzedzie
 void dostarczTowar(object skad, object gdzie,int i){
 	goto(skad.position);
 	grab();
 	goto(new point(gdzie.position.x,gdzie.position.y-4-2*i,gdzie.position.z));
 	drop();
 }
+
 
 void sprawdzEnergie(object kogo,object gdzie,float poziom){
 	if(kogo.energyCell.energyLevel<poziom){
@@ -36,7 +39,11 @@ extern void object::Wspolpraca()
 	  object huta = radar(Converter);
 	  object stacja = radar(PowerStation);
 	  object samolot = radar(WingedGrabber);
+	
+	
 	for(int i =0;i<5;i++){
+		
+		//ustawia sie w swoim miejscu pod kopalnia i czeka w kolejce
 		goto(new point(kopalnia.position.x-5,kopalnia.position.y-4,kopalnia.position.z));
 		    while(czekajWKolejce(kopalnia, samolot)){
 		}

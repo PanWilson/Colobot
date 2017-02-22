@@ -1,0 +1,45 @@
+//leci do najblizszego wolnego miejsca obko pajaka !!!!!COS TU NIE DZIALA!!!!!!
+void ustawSie(object obiekt){
+	point miejsce = space(new point(obiekt.position.x,obiekt.position.y,obiekt.position.z),30,35);
+	goto(miejsce);
+	turn(direction(obiekt.position));
+}
+
+void zabij(object kogo){
+	ustawSie(kogo);
+	fire(0.1);
+}
+
+
+void sprawdzEnergie(object kogo,object gdzie,float poziom){
+	if(kogo.energyCell.energyLevel<poziom){
+		goto(gdzie.position);
+		wait(5);
+	}
+}
+
+extern void object::Wspolpraca()
+{
+	  object stacja = radar(PowerStation);
+	  object[] pajaki = radarall(AlienSpider); 
+	  object cel;
+	  object towar;
+	  int score = 0;
+	
+	while(score<sizeof(pajaki)){
+		
+		//SEARCH szuka pajaka ktory jest blisko Uranu
+		do{
+			cel= pajaki[score];
+			towar= search(UraniumOre,cel.position);
+			score++;
+		}while(distance(towar.position,cel.position)>35);
+		
+		//DESTROY
+		zabij(cel);
+		
+		
+		sprawdzEnergie(this,stacja,0.30);
+	}
+}
+
