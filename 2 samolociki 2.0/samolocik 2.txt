@@ -9,6 +9,36 @@ bool czekajWKolejce(object doCzego, object kolejka){
 	}
 }
 
+void ustawSie(object obiekt){
+	goto(new point(obiekt.position.x+4,obiekt.position.y,obiekt.position.z));
+	turn(direction(obiekt.position));
+}
+
+object rozgladajSie(int szukany,int kierunek){
+	object hlp;
+	if((hlp = radar(szukany, kierunek, 100, 0, 20))!=null&&detect (WingedGrabber)==false)return hlp;
+	else{
+		wait(1);
+		return hlp;
+	}
+}
+
+void zaladuj(object co, object gdzie){
+	goto(co.position);
+	grab();
+	goto(gdzie.position);
+	drop();
+}
+
+object czekajNa(int co){
+	object hlp;
+	if((hlp = radar(co, 0, 45, 0, 20))!=null&&detect (WingedGrabber)==false)return hlp;
+	else {
+		wait(1);
+		return hlp;
+	}
+}
+
 //dostarcz towar z pozycji towaru do miejsca docelowego
 void dostarczTowar(object skad, object gdzie){
 	goto(skad.position);
@@ -26,8 +56,11 @@ void dostarczTowar(object skad, object gdzie,int i){
 }
 
 
-void sprawdzEnergie(object kogo,object gdzie,float poziom){
+void sprawdzEnergie(object kogo,object gdzie,float poziom, object drugi){
 	if(kogo.energyCell.energyLevel<poziom){
+		goto(space(gdzie.position,4,8));
+		    while(czekajWKolejce(gdzie, drugi)){
+		}
 		goto(gdzie.position);
 		wait(5);
 	}
@@ -48,7 +81,46 @@ extern void object::Wspolpraca()
 		    while(czekajWKolejce(kopalnia, samolot)){
 		}
 		dostarczTowar(kopalnia, huta,i);
-		sprawdzEnergie(this,stacja,0.30);
+		sprawdzEnergie(this,stacja,0.30,samolot);
 	}
-	goto(space(stacja.position));
+	
+	
+	object elektrownia = radar(NuclearPlant);
+	object flag = radar(BlueFlag);
+	object ladunek;
+	int i=0;
+	
+	while(true){
+		
+		sprawdzEnergie(this,stacja,0.30,samolot);
+		
+		ustawSie(elektrownia);
+		
+		//rozglada sie na zmiane pod katem 45
+		int h=45;
+		while((ladunek = rozgladajSie(UraniumOre, h))==null){
+		}
+		
+		zaladuj(ladunek, elektrownia);
+		motor(-1,-1);
+		wait(1);
+		motor(0,0);
+		//NIE USTAWIA SIE PRZED!!!!!!!
+		ustawSie(huta);
+		
+		while((ladunek = czekajNa(PowerCell))==null){
+			
+		}
+		
+		//dostarczenie bloku Tytanu z Convertera na sklad
+		goto(ladunek.position);
+		grab();
+		//oblicza pozycje w ktorej ma postawic "klocka"
+		turn(direction(flag.position));
+		move(distance(flag.position,position)-(20-(11-i*1.1)));
+		//goto(new point(huta.position.x+15-i*1.1,huta.position.y,huta.position.z));
+		drop();
+		i++;
+	}
+	
 }

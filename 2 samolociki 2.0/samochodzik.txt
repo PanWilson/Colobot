@@ -1,3 +1,4 @@
+
 void wymienBatterie(object bateria){
 	goto(bateria.position);
 	grab(EnergyCell);
@@ -42,37 +43,43 @@ extern void object::Wspolpraca()
 	object flag = radar(RedFlag);
 	object bateria = radar(PowerCell);
 	object ladunek;
-
-
+	
+	
 	//petla zycia - doniesienie 10 Tytanow
 	for(int i =0;i<10;i++){
-
-
+		
+		
 		//sprawdzanie energi
 		if(energyCell.energyLevel<0.10){
 			wymienBatterie(bateria);
 		}
-
-
+		
+		
 		ustawSie(huta);
-
+		
 		//rozglada sie na zmiane pod katem 45 i -45 stopni
 		int h=45;
 		while((ladunek = rozgladajSie(TitaniumOre, h))==null){
 			h*=-1;
 		}
-
+		
 		zaladuj(ladunek, huta);
-		ustawSie(huta);
-
+		motor(-1,-1);
+		wait(1);
+		motor(0,0);
+		//ustawSie(huta);
+		
 		while((ladunek = czekajNaTytan())==null){
-
+			
 		}
-
+		
 		//dostarczenie bloku Tytanu z Convertera na sklad
 		goto(ladunek.position);
 		grab();
-		goto(new point(huta.position.x+15-i*1.1,huta.position.y,huta.position.z));
+		//oblicza pozycje w ktorej ma postawic "klocka"
+		turn(direction(flag.position));
+		move(distance(flag.position,position)-(20-(11-i*1.1)));
+		//goto(new point(huta.position.x+15-i*1.1,huta.position.y,huta.position.z));
 		drop();
 	}
 }

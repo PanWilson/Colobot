@@ -1,8 +1,8 @@
 //leci do najblizszego wolnego miejsca obko pajaka !!!!!COS TU NIE DZIALA!!!!!!
 void ustawSie(object obiekt){
-	point miejsce = space(new point(obiekt.position.x,obiekt.position.y,obiekt.position.z),30,35);
-	goto(miejsce);
-	turn(direction(obiekt.position));
+	point miejsce = space(new point(obiekt.position.x,obiekt.position.y,obiekt.position.z),25,50,2);
+	goto(miejsce,70);
+	aim(0,direction(obiekt.position));
 }
 
 void zabij(object kogo){
@@ -13,7 +13,7 @@ void zabij(object kogo){
 
 void sprawdzEnergie(object kogo,object gdzie,float poziom){
 	if(kogo.energyCell.energyLevel<poziom){
-		goto(gdzie.position);
+		goto(gdzie.position,70);
 		wait(5);
 	}
 }

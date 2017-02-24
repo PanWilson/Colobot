@@ -12,7 +12,7 @@ bool czekajWKolejce(object doCzego, object kolejka){
 void dostarczTowar(object skad, object gdzie){
 	goto(skad.position);
 	grab();
-	goto(new point(gdzie.position.x+10,gdzie.position.y+10,gdzie.position.z));
+	goto(new point(gdzie.position.x+10,gdzie.position.y,gdzie.position.z));
 	drop();
 }
 
@@ -26,13 +26,15 @@ void dostarczTowar(object skad, object gdzie,int i){
 }
 
 
-void sprawdzEnergie(object kogo,object gdzie,float poziom ){
+void sprawdzEnergie(object kogo,object gdzie,float poziom, object drugi){
 	if(kogo.energyCell.energyLevel<poziom){
+		goto(space(gdzie.position));
+		    while(czekajWKolejce(gdzie, drugi)){
+		}
 		goto(gdzie.position);
 		wait(5);
 	}
 }
-
 extern void object::Wspolpraca()
 {
 	object kopalnia = radar(Derrick);
@@ -50,7 +52,7 @@ extern void object::Wspolpraca()
 		
 		dostarczTowar(kopalnia, huta,i);
 		
-		sprawdzEnergie(this,stacja,0.30);
+		sprawdzEnergie(this,stacja,0.30,samolot);
 	}
 	
 	//dostarcza beterie do transportera naziemnego
