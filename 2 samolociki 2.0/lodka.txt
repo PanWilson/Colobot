@@ -39,7 +39,7 @@ void dostarczTowar(object skad, object gdzie){
 void dostarczTowar(object skad, object gdzie,int i){
 	goto(skad.position);
 	grab();
-	goto(new point(gdzie.position.x-6-2*i,gdzie.position.y,gdzie.position.z));
+	goto(new point(gdzie.position.x-7-2*i,gdzie.position.y,gdzie.position.z));
 	drop();
 }
 

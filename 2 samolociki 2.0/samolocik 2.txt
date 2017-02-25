@@ -1,6 +1,26 @@
+//Zmienia dlugosc vectora
+point zmienDlugosc(point vector, float dlugosc){
+	float hlpDlug = sqrt(pow(vector.x,2)+pow(vector.y,2));
+	float prop = dlugosc/hlpDlug;
+	return new point(vector.x*prop,vector.y*prop,vector.z);
+}
+
+//Znajduje vector ktory okresla kierunek obiektu
+point vectorPrzod(object obiekt){
+	float x,y,z;
+	y = tan(obiekt.orientation)*10;
+	x=10;
+	z=0;
+	if(obiekt.orientation<=270&&obiekt.orientation>90){
+		x*=-1;
+		y*=-1;
+	}
+	return new point(x,y,z);
+}
+
 // czeka na swoja kolej aby podejsc do kopalni
 bool czekajWKolejce(object doCzego, object kolejka){
-	if(distance(kolejka.position,doCzego.position)>15){
+	if(distance(kolejka.position,doCzego.position)>12){
 		return false;
 	}
 	else {
@@ -10,7 +30,9 @@ bool czekajWKolejce(object doCzego, object kolejka){
 }
 
 void ustawSie(object obiekt){
-	goto(new point(obiekt.position.x+4,obiekt.position.y,obiekt.position.z));
+	point hlpVect = vectorPrzod(obiekt);
+	hlpVect =zmienDlugosc(hlpVect, 10);
+	goto(new point(obiekt.position.x+hlpVect.x,obiekt.position.y+hlpVect.y,obiekt.position.z),6);
 	turn(direction(obiekt.position));
 }
 
@@ -24,15 +46,15 @@ object rozgladajSie(int szukany,int kierunek){
 }
 
 void zaladuj(object co, object gdzie){
-	goto(co.position);
+	goto(co.position,6);
 	grab();
-	goto(gdzie.position);
+	goto(gdzie.position,6);
 	drop();
 }
 
 object czekajNa(int co){
 	object hlp;
-	if((hlp = radar(co, 0, 45, 0, 20))!=null&&detect (WingedGrabber)==false)return hlp;
+	if((hlp = radar(co, 0, 90))!=null)return hlp;
 	else {
 		wait(1);
 		return hlp;
@@ -41,27 +63,27 @@ object czekajNa(int co){
 
 //dostarcz towar z pozycji towaru do miejsca docelowego
 void dostarczTowar(object skad, object gdzie){
-	goto(skad.position);
+	goto(skad.position,6);
 	grab();
-	goto(new point(gdzie.position.x+10,gdzie.position.y+10,gdzie.position.z));
+	goto(new point(gdzie.position.x+10,gdzie.position.y+10,gdzie.position.z),6);
 	drop();
 }
 
 //dostarcz towar z pozycji towaru do miejsca docelowego + uklada w rzedzie
 void dostarczTowar(object skad, object gdzie,int i){
-	goto(skad.position);
+	goto(skad.position,6);
 	grab();
-	goto(new point(gdzie.position.x,gdzie.position.y-4-2*i,gdzie.position.z));
+	goto(new point(gdzie.position.x,gdzie.position.y-4-2*i,gdzie.position.z),6);
 	drop();
 }
 
 
 void sprawdzEnergie(object kogo,object gdzie,float poziom, object drugi){
 	if(kogo.energyCell.energyLevel<poziom){
-		goto(space(gdzie.position,4,8));
+		goto(space(gdzie.position,4,8),6);
 		    while(czekajWKolejce(gdzie, drugi)){
 		}
-		goto(gdzie.position);
+		goto(gdzie.position,6);
 		wait(5);
 	}
 }
@@ -72,12 +94,15 @@ extern void object::Wspolpraca()
 	  object huta = radar(Converter);
 	  object stacja = radar(PowerStation);
 	  object samolot = radar(WingedGrabber);
+	    object elektrownia = radar(NuclearPlant);
+	    object flag = radar(BlueFlag);
+	
 	
 	
 	for(int i =0;i<5;i++){
 		
 		//ustawia sie w swoim miejscu pod kopalnia i czeka w kolejce
-		goto(new point(kopalnia.position.x-5,kopalnia.position.y-4,kopalnia.position.z));
+		goto(new point(kopalnia.position.x-5,kopalnia.position.y-4,kopalnia.position.z),6);
 		    while(czekajWKolejce(kopalnia, samolot)){
 		}
 		dostarczTowar(kopalnia, huta,i);
@@ -85,10 +110,10 @@ extern void object::Wspolpraca()
 	}
 	
 	
-	object elektrownia = radar(NuclearPlant);
-	object flag = radar(BlueFlag);
 	object ladunek;
 	int i=0;
+	
+	
 	
 	while(true){
 		
@@ -103,17 +128,15 @@ extern void object::Wspolpraca()
 		
 		zaladuj(ladunek, elektrownia);
 		motor(-1,-1);
-		wait(1);
+		wait(0.8);
 		motor(0,0);
-		//NIE USTAWIA SIE PRZED!!!!!!!
-		ustawSie(huta);
+		wait(32);
+		//while((ladunek = czekajNa(NuclearCell))==null){
 		
-		while((ladunek = czekajNa(PowerCell))==null){
-			
-		}
+		//}
 		
-		//dostarczenie bloku Tytanu z Convertera na sklad
-		goto(ladunek.position);
+		//goto(ladunek.position);
+		goto(elektrownia.position,6);
 		grab();
 		//oblicza pozycje w ktorej ma postawic "klocka"
 		turn(direction(flag.position));

@@ -1,3 +1,22 @@
+//Zmienia dlugosc vectora
+point zmienDlugosc(point vector, float dlugosc){
+	float hlpDlug = sqrt(pow(vector.x,2)+pow(vector.y,2));
+	float prop = dlugosc/hlpDlug;
+	return new point(vector.x*prop,vector.y*prop,vector.z);
+}
+
+//Znajduje vector ktory okresla kierunek obiektu
+point vectorPrzod(object obiekt){
+	float x,y,z;
+	y = tan(obiekt.orientation)*10;
+	x=10;
+	z=0;
+	if(obiekt.orientation<=270&&obiekt.orientation>90){
+		x*=-1;
+		y*=-1;
+	}
+	return new point(x,y,z);
+}
 
 void wymienBatterie(object bateria){
 	goto(bateria.position);
@@ -8,7 +27,9 @@ void wymienBatterie(object bateria){
 }
 
 void ustawSie(object obiekt){
-	goto(new point(obiekt.position.x+4,obiekt.position.y,obiekt.position.z));
+	point hlpVect = vectorPrzod(obiekt);
+	hlpVect =zmienDlugosc(hlpVect, 4);
+	goto(new point(obiekt.position.x+hlpVect.x,obiekt.position.y+hlpVect.y,obiekt.position.z));
 	turn(direction(obiekt.position));
 }
 
@@ -43,6 +64,7 @@ extern void object::Wspolpraca()
 	object flag = radar(RedFlag);
 	object bateria = radar(PowerCell);
 	object ladunek;
+	
 	
 	
 	//petla zycia - doniesienie 10 Tytanow

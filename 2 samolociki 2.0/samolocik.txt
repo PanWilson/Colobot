@@ -41,6 +41,8 @@ extern void object::Wspolpraca()
 	object huta = radar(Converter);
 	object stacja = radar(PowerStation);
 	object samolot = radar(WingedGrabber);
+	object cell= radar(NuclearCell);
+	object flag = radar(BlueFlag);
 	
 	
 	for(int i =0;i<5;i++){
@@ -58,5 +60,6 @@ extern void object::Wspolpraca()
 	//dostarcza beterie do transportera naziemnego
 	object bateria = search(PowerCell,stacja.position);
 	dostarczTowar(bateria, huta);
+	dostarczTowar(cell, flag);
 	goto(space(stacja.position));
 }
