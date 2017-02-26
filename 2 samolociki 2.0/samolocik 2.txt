@@ -29,12 +29,15 @@ bool czekajWKolejce(object doCzego, object kolejka){
 	}
 }
 
+//ustawia sie przed obiektem
 void ustawSie(object obiekt){
 	point hlpVect = vectorPrzod(obiekt);
 	hlpVect =zmienDlugosc(hlpVect, 10);
 	goto(new point(obiekt.position.x+hlpVect.x,obiekt.position.y+hlpVect.y,obiekt.position.z),6);
 	turn(direction(obiekt.position));
 }
+
+
 
 object rozgladajSie(int szukany,int kierunek){
 	object hlp;
@@ -46,20 +49,12 @@ object rozgladajSie(int szukany,int kierunek){
 }
 
 void zaladuj(object co, object gdzie){
-	goto(co.position,6);
+	goto(co.position);
 	grab();
-	goto(gdzie.position,6);
+	goto(gdzie.position);
 	drop();
 }
 
-object czekajNa(int co){
-	object hlp;
-	if((hlp = radar(co, 0, 90))!=null)return hlp;
-	else {
-		wait(1);
-		return hlp;
-	}
-}
 
 //dostarcz towar z pozycji towaru do miejsca docelowego
 void dostarczTowar(object skad, object gdzie){
@@ -71,9 +66,9 @@ void dostarczTowar(object skad, object gdzie){
 
 //dostarcz towar z pozycji towaru do miejsca docelowego + uklada w rzedzie
 void dostarczTowar(object skad, object gdzie,int i){
-	goto(skad.position,6);
+	goto(skad.position);
 	grab();
-	goto(new point(gdzie.position.x,gdzie.position.y-4-2*i,gdzie.position.z),6);
+	goto(new point(gdzie.position.x,gdzie.position.y-5-2*i,gdzie.position.z),6);
 	drop();
 }
 
@@ -83,10 +78,16 @@ void sprawdzEnergie(object kogo,object gdzie,float poziom, object drugi){
 		goto(space(gdzie.position,4,8),6);
 		    while(czekajWKolejce(gdzie, drugi)){
 		}
-		goto(gdzie.position,6);
+		goto(gdzie.position);
 		wait(5);
 	}
 }
+
+
+
+
+
+
 
 extern void object::Wspolpraca()
 {
@@ -106,7 +107,7 @@ extern void object::Wspolpraca()
 		    while(czekajWKolejce(kopalnia, samolot)){
 		}
 		dostarczTowar(kopalnia, huta,i);
-		sprawdzEnergie(this,stacja,0.30,samolot);
+		sprawdzEnergie(this,stacja,0.35,samolot);
 	}
 	
 	
@@ -117,7 +118,7 @@ extern void object::Wspolpraca()
 	
 	while(true){
 		
-		sprawdzEnergie(this,stacja,0.30,samolot);
+		sprawdzEnergie(this,stacja,0.35,samolot);
 		
 		ustawSie(elektrownia);
 		
@@ -126,22 +127,23 @@ extern void object::Wspolpraca()
 		while((ladunek = rozgladajSie(UraniumOre, h))==null){
 		}
 		
+		
+		//zaladowanie klocka do elektrowni i czekanie na zakonczenie przetwarzania
 		zaladuj(ladunek, elektrownia);
 		motor(-1,-1);
 		wait(0.8);
 		motor(0,0);
 		wait(32);
-		//while((ladunek = czekajNa(NuclearCell))==null){
 		
-		//}
 		
-		//goto(ladunek.position);
-		goto(elektrownia.position,6);
+		//odebranie klocka
+		goto(elektrownia.position);
 		grab();
+		
+		
 		//oblicza pozycje w ktorej ma postawic "klocka"
 		turn(direction(flag.position));
-		move(distance(flag.position,position)-(20-(11-i*1.1)));
-		//goto(new point(huta.position.x+15-i*1.1,huta.position.y,huta.position.z));
+		move(distance(flag.position,position)-(20-(2-i*1.1)));
 		drop();
 		i++;
 	}

@@ -8,11 +8,13 @@ bool czekajWKolejce(object doCzego, object kolejka){
 		return true;
 	}
 }
+
+
 //dostarcz towar z pozycji towaru do miejsca docelowego
 void dostarczTowar(object skad, object gdzie){
 	goto(skad.position);
 	grab();
-	goto(new point(gdzie.position.x+10,gdzie.position.y,gdzie.position.z));
+	goto(new point(gdzie.position.x+10,gdzie.position.y+4,gdzie.position.z));
 	drop();
 }
 
@@ -35,6 +37,17 @@ void sprawdzEnergie(object kogo,object gdzie,float poziom, object drugi){
 		wait(5);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
 extern void object::Wspolpraca()
 {
 	object kopalnia = radar(Derrick);
@@ -54,8 +67,10 @@ extern void object::Wspolpraca()
 		
 		dostarczTowar(kopalnia, huta,i);
 		
-		sprawdzEnergie(this,stacja,0.30,samolot);
+		sprawdzEnergie(this,stacja,0.35,samolot);
 	}
+	
+	
 	
 	//dostarcza beterie do transportera naziemnego
 	object bateria = search(PowerCell,stacja.position);

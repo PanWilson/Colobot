@@ -26,6 +26,8 @@ void wymienBatterie(object bateria){
 	drop(EnergyCell);
 }
 
+
+//ustawia sie przed obiektem
 void ustawSie(object obiekt){
 	point hlpVect = vectorPrzod(obiekt);
 	hlpVect =zmienDlugosc(hlpVect, 4);
@@ -79,17 +81,20 @@ extern void object::Wspolpraca()
 		
 		ustawSie(huta);
 		
+		
+		
 		//rozglada sie na zmiane pod katem 45 i -45 stopni
 		int h=45;
 		while((ladunek = rozgladajSie(TitaniumOre, h))==null){
 			h*=-1;
 		}
 		
+		
 		zaladuj(ladunek, huta);
 		motor(-1,-1);
-		wait(1);
+		wait(1.1);
 		motor(0,0);
-		//ustawSie(huta);
+		
 		
 		while((ladunek = czekajNaTytan())==null){
 			
@@ -101,7 +106,6 @@ extern void object::Wspolpraca()
 		//oblicza pozycje w ktorej ma postawic "klocka"
 		turn(direction(flag.position));
 		move(distance(flag.position,position)-(20-(11-i*1.1)));
-		//goto(new point(huta.position.x+15-i*1.1,huta.position.y,huta.position.z));
 		drop();
 	}
 }
