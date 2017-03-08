@@ -17,7 +17,7 @@ Platform assembly: C:\Users\panwi\Desktop\UnClassified_Data\Managed\UnityEngine.
 Loading C:\Users\panwi\Desktop\UnClassified_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: C:\Users\panwi\Desktop\UnClassified_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
 Loading C:\Users\panwi\Desktop\UnClassified_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
-- Completed reload, in  0.021 seconds
+- Completed reload, in  0.111 seconds
 Platform assembly: C:\Users\panwi\Desktop\UnClassified_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\panwi\Desktop\UnClassified_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
